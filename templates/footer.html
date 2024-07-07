@@ -49,59 +49,41 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-3">
-            <br>
-
-            <h6 class="mt-3"><a href="">FIND A STORE</a></h6>
-            <h6 class="mt-3"><a href="">SIGN UP FOR EMAIL</a></h6>
-            <h6 class="mt-3"><a href="">BECOME A MEMBER</h6>
-            
-            <h6 class="mt-3"><a href="/admin/">ADMIN LOGIN</a></h6>
-           
+          <a href="{% url 'core:terms-and-conditions' %}">Terms & Conditions</a>
+          <a href="{% url 'core:privacy-policy' %}">Privacy Policy</a>
         </div>
         <div class="col-sm-3">
-            <h6 class="mt-3"><a href="">GET HELP</a></h6>
-            <a href="">Order Status</a>
-            <a href="">Shipping and Delivery</a>
-            <a href="">Returns</a>
-            <a href="">Payment Options</a>
-            <a href="">Contact Us</a>
+          <a href="{% url 'core:privacy-policy' %}">Contact Us: </a>
+          <a href="{% url 'core:terms-and-conditions' %}">          <img class="h-size2" src="{% static 'images/hui.png' %}" alt="IMG-PAYPAL"> 00447405562102</a>
+          <a href="mailto:info@spstarmall.uk">info@spstarmall.uk</a>
+        
         </div>
         <div class="col-sm-3">
-            <h6 class="mt-3"><a href="">ABOUT DJANGO</a></h6>
-            <a href="">News</a>
-            <a href="">Careers</a>
-            <a href="">Investors</a>
-            <a href="">Sustainability</a>
-            
-            
-
-
-
+          <a href="#">
+            <img class="h-size2" src="{% static 'images/icons/paypal.png' %}" alt="IMG-PAYPAL">
+          </a>
+    
+          <a href="#">
+            <img class="h-size2" src="{% static 'images/icons/visa.png' %}" alt="IMG-VISA">
+          </a>
+    
+          <a href="#">
+            <img class="h-size2" src="{% static 'images/icons/mastercard.png' %}" alt="IMG-MASTERCARD">
+          </a>
+    
+          <a href="#">
+            <img class="h-size2" src="{% static 'images/icons/express.png' %}" alt="IMG-EXPRESS">
+          </a>
+    
+          <a href="#">
+            <img class="h-size2" src="{% static 'images/icons/discover.png' %}" alt="IMG-DISCOVER">
+          </a>
         </div>
-        <div class="col-sm-3">
-          <a href="">Voice of Customer</a>
-          <a href="">Contacts by Branch</a>
-          <a href="">Ethics Reporting</a>
-          <a href="">Careers</a>
-
-          <br><br>
-          <a href="">Business Inquiry</a>
-          <br>
-          <a href="" class="ico"><i class="fab fa-apple fa-2x"></i> Apple Store</a>
-          <a href="" class="ico"><i class="fab fa-google-play fa-2x"></i> Google Play</a>
-        </div>
+        
       </div>
+  
       <hr>
-      <div class="row">
-        <div class="col-sm-6">
-          
-        </div>
-        <div class="col-sm-6">
-          
-        </div>
-        <hr>
-        <a href="https://github.com/zinmyoswe" style="margin-left: 1rem">Privacy Policy | @zinmyoswe 2019-2020</a>
-      </div>
+     
     </div>
   </footer>
 <!-- ------------------------------footer end---------------------------------- -->

@@ -11,7 +11,11 @@ from .views import (
     PaymentView,
     AddCouponView,
     RequestRefundView,
-    CategoryView
+    CategoryView,
+    SubcategoryView,
+    privacypolicy,
+    termsandconditions,
+    PickupView
 )
 
 app_name = 'core'
@@ -19,7 +23,10 @@ app_name = 'core'
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('pickup/', PickupView.as_view(), name='pickup'),  # Add this line
     path('category/<slug>/', CategoryView.as_view(), name='category'),
+    path('category/<slug>/', CategoryView.as_view(), name='category'),
+    path('subcategory/<slug>/', SubcategoryView.as_view(), name='subcategory'),
     path('product/<slug>/', ItemDetailView.as_view(), name='product'),
     path('add-to-cart/<slug>/', add_to_cart, name='add-to-cart'),
     path('add_coupon/', AddCouponView.as_view(), name='add-coupon'),
@@ -29,5 +36,9 @@ urlpatterns = [
     path('remove-item-from-cart/<slug>/', remove_single_item_from_cart,
          name='remove-single-item-from-cart'),
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
-    path('request-refund/', RequestRefundView.as_view(), name='request-refund')
+    path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
+    path("privacypolicy/", privacypolicy, name="privacy-policy"),
+    path("termsandconditions/", termsandconditions, name="terms-and-conditions"),
+
+
 ]

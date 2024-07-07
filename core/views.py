@@ -8,9 +8,10 @@ from django.views.generic import ListView, DetailView, View
 from django.shortcuts import redirect
 from django.utils import timezone
 from .forms import CheckoutForm, CouponForm, RefundForm
-from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon, Refund, Category
+from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon, Refund, Category,Subcategory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 
 # Create your views here.
 import random
@@ -140,17 +141,75 @@ class ItemDetailView(DetailView):
 #     template_name = "category.html"
 
 class CategoryView(View):
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        # Retrieve category based on slug from URL kwargs
         category = Category.objects.get(slug=self.kwargs['slug'])
-        item = Item.objects.filter(category=category, is_active=True)
+        
+        # Retrieve subcategories related to the category
+        subcategories = category.subcategories.all()
+        
+        # Retrieve items related to the category that are active
+        item_list = Item.objects.filter(category=category, is_active=True)
+        
+        # Paginate items with 12 items per page
+        paginator = Paginator(item_list, 12)
+        page_number = request.GET.get('page')
+        
+        try:
+            items = paginator.page(page_number)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            items = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            items = paginator.page(paginator.num_pages)
+        
         context = {
-            'object_list': item,
+            'object_list': items,
             'category_title': category,
             'category_description': category.description,
-            'category_image': category.image
+            'category_image': category.image,
+            'subcategories': subcategories,
         }
-        return render(self.request, "category.html", context)
+        
+        return render(request, "category.html", context)
 
+class SubcategoryView(View):
+    def get(self, request, *args, **kwargs):
+        # Retrieve the subcategory based on the slug
+        subcategory = get_object_or_404(Subcategory, slug=self.kwargs['slug'])
+
+        # Get the category of the subcategory
+        category = subcategory.category
+
+        # Filter subcategories belonging to the same category
+        subcategories = Subcategory.objects.filter(category=category)
+
+        # Filter items belonging to the subcategory
+        items = Item.objects.filter(subcategory=subcategory, is_active=True)
+
+        # Pagination logic
+        paginator = Paginator(items, 12)  # Show 12 items per page
+        page_number = request.GET.get('page')
+        try:
+            items = paginator.page(page_number)
+        except PageNotAnInteger:
+            items = paginator.page(1)
+        except EmptyPage:
+            items = paginator.page(paginator.num_pages)
+
+        # Prepare context data
+        context = {
+            'object_list': items,
+            'subcategory_title': subcategory.title,
+            'subcategory_description': subcategory.description,
+            'subcategory_image': subcategory.image,
+            'subcategories': subcategories
+        }
+
+        # Render the subcategory template with the context data
+        return render(request, "subcategory.html", context)
+    
 
 class CheckoutView(View):
     def get(self, *args, **kwargs):
@@ -201,12 +260,44 @@ class CheckoutView(View):
                     return redirect('core:payment', payment_option='stripe')
                 elif payment_option == 'P':
                     return redirect('core:payment', payment_option='paypal')
+                elif payment_option == 'PU':
+                    order.is_pickup = True  # Mark order as pickup
+                    order.save()
+                    return redirect('core:pickup')  # Redirect to the pickup view
                 else:
                     messages.warning(
                         self.request, "Invalid payment option select")
                     return redirect('core:checkout')
         except ObjectDoesNotExist:
             messages.error(self.request, "You do not have an active order")
+            return redirect("core:order-summary")
+
+# views.py
+
+class PickupView(View):
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False, is_pickup=True)
+            context = {
+                'order': order
+            }
+            return render(self.request, 'pickup.html', context)
+        except ObjectDoesNotExist:
+            messages.error(self.request, "You do not have an active pickup order")
+            return redirect("core:order-summary")
+
+    def post(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False, is_pickup=True)
+            # Mark the order as ordered
+            order.ordered = True
+            order.ref_code = create_ref_code()
+            order.save()
+
+            messages.success(self.request, "Order was successful and marked for pickup")
+            return redirect("/")
+        except ObjectDoesNotExist:
+            messages.error(self.request, "You do not have an active pickup order")
             return redirect("core:order-summary")
 
 
@@ -382,3 +473,9 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist")
                 return redirect("core:request-refund")
+            
+def privacypolicy(request):
+    return render(request, 'privacypolicy.html')
+
+def termsandconditions(request):
+    return render(request, 'termsandconditions.html')

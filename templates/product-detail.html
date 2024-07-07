@@ -33,7 +33,7 @@
 							</div>
 						</div>
 
-						<div class="item-slick3" data-thumb="{% static 'images/product-detail2.jpg' %}">
+						{% comment %} <div class="item-slick3" data-thumb="{% static 'images/product-detail2.jpg' %}">
 							<div class="wrap-pic-w">
 								<img src="{% static 'images/product-detail2.jpg' %}" alt="IMG-PRODUCT">
 							</div>
@@ -43,7 +43,7 @@
 							<div class="wrap-pic-w">
 								<img src="{% static 'images/product-detail3.jpg' %}" alt="IMG-PRODUCT">
 							</div>
-						</div>
+						</div> {% endcomment %}
 					</div>
 				</div>
 			</div>
@@ -52,59 +52,50 @@
 				<h4 class="product-detail-name m-text16 p-b-13">
 					{{object.title}}
 				</h4>
+				<h4 class="product-detail-name m-text16 p-b-13">
+			      Offer until: {{ object.discount_date_time }}
+				</h4>
 
 				
 				{% if object.discount_price %}
 								<span class="block2-oldprice m-text7 p-r-5" style="font-size: 1.5rem;">
-									${{ object.price }}
+									£ {{ object.price }}
 								</span>
 
 								<span class="block2-newprice m-text8 p-r-5" style="font-size: 1.5rem;">
-									${{ object.discount_price }}
+									£ {{ object.discount_price }}
 								</span>
 								{% else %}
 								<span class="m-text17">
-									${{object.price}}
+									£ {{object.price}}
 								</span>
 								{% endif %}
 
 				<p class="s-text8 p-t-10">
 					{{ object.description_short }}
 				</p>
+				 <p class="s-text8 p-t-10">
+					Pack Size: {{ object.pack_size }}
+				</p>
+				<p class="s-text8 p-t-10">
+					Price including vat: £ {{ object.price_inc_vat }}
+				</p>
+				<p class="s-text8 p-t-10">
+					RRP: £ {{ object.rrp }} 
+				</p>
+				<p class="s-text8 p-t-10">
+					POR: {{ object.por}}%
+				</p>
+				<p class="s-text8 p-t-10">
+					VAT: {{ object.vat }}%
+				</p> 
+				
 
 				<!--  -->
 				<div class="p-t-33 p-b-60">
-					<div class="flex-m flex-w p-b-10">
-						<div class="s-text15 w-size15 t-center">
-							Size
-						</div>
+				
 
-						<div class="rs2-select2 rs3-select2 w-size16">
-							<select class="form-control" name="size">
-								<option>Choose an option</option>
-								<option>S</option>
-								<option>M</option>
-								<option>L</option>
-								<option>XL</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="flex-m flex-w">
-						<div class="s-text15 w-size15 t-center">
-							Color
-						</div>
-
-						<div class="rs2-select2 rs3-select2 w-size16">
-							<select class="form-control" name="color">
-								<option>Choose an option</option>
-								<option>Gray</option>
-								<option>Red</option>
-								<option>Black</option>
-								<option>Blue</option>
-							</select>
-						</div>
-					</div>
+					
 
 					<div class="flex-r-m flex-w p-t-10">
 						<div class="w-size16 flex-m flex-w">
@@ -148,44 +139,115 @@
 
 					<div class="dropdown-content dis-none p-t-15 p-b-23">
 						<p class="s-text8">
-							{{ object.description_long }}
+							{{ object.description_long|linebreaks }}
 						</p>
 					</div>
 				</div>
 
 				<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
 					<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
-						Additional information
+					     Ingredients and Allergens
 						<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
 						<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
 					</h5>
 
 					<div class="dropdown-content dis-none p-t-15 p-b-23">
 						<p class="s-text8">
-							Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed velit. Proin gravida arcu nisl, a dignissim mauris placerat
+							<li>{{ object.ingredients_and_allergens }}</li>
 						</p>
 					</div>
 				</div>
 
 				<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
 					<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
-						Reviews (0)
+						Handling and Cooking
 						<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
 						<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
 					</h5>
 
 					<div class="dropdown-content dis-none p-t-15 p-b-23">
 						<p class="s-text8">
-							Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed velit. Proin gravida arcu nisl, a dignissim mauris placerat
+							<li>{{ object.handling_and_cooking }}</li>
 						</p>
 					</div>
 				</div>
+
+				<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
+					<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+						Product Packaging Information
+						<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+						<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+					</h5>
+
+					<div class="dropdown-content dis-none p-t-15 p-b-23">
+						<p class="s-text8">
+							<li>{{ object.product_packaging_information }}</li>
+						</p>
+					</div>
+				</div>
+
+				<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
+					<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+						Shelf Dimensions
+						<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+						<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+					</h5>
+
+					<div class="dropdown-content dis-none p-t-15 p-b-23">
+						<p class="s-text8">
+							<li>{{ object.shelf_dimensions|linebreaks }}</li>
+						</p>
+					</div>
+				</div>
+
+				<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
+					<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+						Brand and Supplier Information
+						<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+						<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+					</h5>
+
+					<div class="dropdown-content dis-none p-t-15 p-b-23">
+						<p class="s-text8">
+							<li>{{ object.brand_and_supplier_information|linebreaks }}</li>
+						</p>
+					</div>
+				</div>
+
+				<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
+					<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+						Safety Information
+						<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+						<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+					</h5>
+
+					<div class="dropdown-content dis-none p-t-15 p-b-23">
+						<p class="s-text8">
+							<li>{{ object.safety_information|linebreaks }}</li>
+						</p>
+					</div>
+				</div>
+
+				<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
+					<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+						Product Disclaimer
+						<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+						<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+					</h5>
+
+					<div class="dropdown-content dis-none p-t-15 p-b-23">
+						<p class="s-text8">
+							<li>{{ object.product_disclaimer|linebreaks }}</li>
+						</p>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
 
 
-	<!-- Relate Product -->
+	{% comment %} <!-- Relate Product -->
 	<section class="relateproduct bgwhite p-t-45 p-b-138">
 		<div class="container">
 			<div class="sec-title p-b-60">
@@ -473,10 +535,10 @@
 			</div>
 
 		</div>
-	</section>
+	</section> {% endcomment %}
 
 
-	<!-- Footer -->
+	{% comment %} <!-- Footer -->
 	<footer class="bg6 p-t-45 p-b-43 p-l-45 p-r-45">
 		<div class="flex-w p-b-90">
 			<div class="w-size6 p-t-30 p-l-15 p-r-15 respon3">
@@ -642,7 +704,7 @@
 				Copyright © 2018 All rights reserved. | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
 			</div>
 		</div>
-	</footer>
+	</footer> {% endcomment %}
 
 
 

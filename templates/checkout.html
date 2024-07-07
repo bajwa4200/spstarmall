@@ -1,26 +1,26 @@
-{% extends 'base.html' %} 
-{% load static %} 
+{% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
 
+<style>
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
-   <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
 
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-      .form-control {
+  .form-control {
     display: block;
     width: 100%;
     height: calc(1.5em + .75rem + 2px);
@@ -33,14 +33,11 @@
     background-clip: padding-box;
     border: 1px solid #ced4da !important;
     border-radius: .25rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  }
+</style>
 
-
-    </style>
-  
- 
-    <div class="container">
+<div class="container">
   <div class="py-5 text-center">
     <img class="d-block mx-auto mb-4" src="/docs/4.3/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
     <h2>Checkout form</h2>
@@ -48,13 +45,10 @@
   </div>
 
   <div class="row">
-
-
-    <div class="col-md-8 order-md-1 card" >
-    	
-      <h4 class="mb-3" style=" margin-top: 26px;">Billing address</h4>
+    <div class="col-md-8 order-md-1 card">
+      <h4 class="mb-3" style="margin-top: 26px;">Billing address</h4>
       <form method="POST" class="needs-validation" novalidate>
-      	{% csrf_token %}
+        {% csrf_token %}
         <div class="mb-3">
           <label for="address">Address</label>
           {{ form.street_address }}
@@ -68,7 +62,7 @@
         <div class="row">
           <div class="col-md-5 mb-3">
             <label for="country">Country</label>
-           		{{ form.country }}
+            {{ form.country }}
             <div class="invalid-feedback">
               Please select a valid country.
             </div>
@@ -79,7 +73,6 @@
               <option value="">Choose...</option>
               <option>California</option>
               <option>Yangon</option>
-
             </select>
             <div class="invalid-feedback">
               Please provide a valid state.
@@ -96,12 +89,10 @@
         <hr class="mb-4">
         <div class="custom-control custom-checkbox">
           <input {% if form.same_shipping_address.value %}checked{% endif %} type="checkbox" class="custom-control-input" id="same_shipping_address">
-          
           <label class="custom-control-label" for="same_shipping_address">Shipping address is the same as my billing address</label>
         </div>
         <div class="custom-control custom-checkbox">
           <input {% if form.save_info.value %}checked{% endif %} type="checkbox" class="custom-control-input" id="save-info">
-          
           <label class="custom-control-label" for="save-info">Save this information for next time</label>
         </div>
         <hr class="mb-4">
@@ -109,30 +100,54 @@
         <h4 class="mb-3">Payment</h4>
 
         <div class="d-block my-3">
-        	{% for value, name in form.fields.payment_option.choices %}
+          {% for value, name in form.fields.payment_option.choices %}
           <div class="custom-control custom-radio">
-            <input id="{{ name }}" name="payment_option" value="{{ value }}" type="radio" class="custom-control-input"  required>
+            <input id="{{ name }}" name="payment_option" value="{{ value }}" type="radio" class="custom-control-input payment-option" required>
             <label class="custom-control-label" for="{{name}}">{{ name }}</label>
           </div>
           {% endfor %}
         </div>
-        
+
         <hr class="mb-4">
         <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
       </form>
     </div>
 
     {% include "order_snippet.html" %}
-
   </div>
-
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017-2019 Company Name</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-  </footer>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    const addressField = document.getElementById('id_street_address');
+    const countryField = document.getElementById('id_country');
+    const stateField = document.getElementById('state');
+    const zipField = document.getElementById('id_zip');
+
+    function toggleAddressFields() {
+      const isPickup = document.getElementById('Pickup').checked;
+
+      addressField.required = !isPickup;
+      countryField.required = !isPickup;
+      stateField.required = !isPickup;
+      zipField.required = !isPickup;
+
+      if (isPickup) {
+        addressField.value = '';
+        countryField.value = '';
+        stateField.value = '';
+        zipField.value = '';
+      }
+    }
+
+    paymentOptions.forEach(option => {
+      option.addEventListener('change', toggleAddressFields);
+    });
+
+    // Initial check in case Pickup is pre-selected
+    toggleAddressFields();
+  });
+</script>
+
 {% endblock content %}

@@ -4,11 +4,11 @@
 
 <style>
 	.topbar {
-		background-color: white;
-		color: black !important;
+		background-color: black;
+		color: white !important;
 	}
 	.topbar a:hover{
-		color: black;
+		color: white;
 	}
 </style>
 <!-- Header -->
@@ -16,38 +16,24 @@
 		<!-- Header desktop -->
 		<div class="container-menu-header">
 			<div class="topbar">
-				<div class="topbar-social">
-					<a href="#" class="topbar-social-item fab fa-facebook"></a>
-					<a href="#" class="topbar-social-item fab fa-instagram"></a>
-					<a href="#" class="topbar-social-item fab fa-pinterest-p"></a>
-					<a href="#" class="topbar-social-item fab fa-twitter"></a>
-					<a href="#" class="topbar-social-item fab fa-youtube"></a>
-				</div>
 
-				<span class="topbar-child1">
-					Free shipping for standard order over $100
-				</span>
+				
 
 				<div class="topbar-child2">
-					<span class="topbar-email">
+					{% comment %} <span class="topbar-email">
 						<a href="https://github.com/zinmyoswe">
 						overmidnight12@gmail.com
 					    </a>
-					</span>
+					</span> {% endcomment %}
 
-					<div class="topbar-language rs1-select2">
-						<select class="selection-1" name="time">
-							<option>USD</option>
-							<option>EUR</option>
-						</select>
-					</div>
+				
 				</div>
 			</div>
 
 			<div class="wrap_header">
 				<!-- Logo -->
 				<a href="/" class="logo">
-					<p style="color: black; "><b style="font-size: 22px;">D</b>JANGO SHOP</p>
+					<p style="color: black; "><b style="font-size: 22px;">SP</b>STAR MALL</p>
 				</a>
 
 				<!-- Menu -->
@@ -97,12 +83,12 @@
 
 		<!-- Header Mobile -->
 		<div class="wrap_header_mobile">
-			<!-- Logo moblie -->
+			{% comment %} <!-- Logo moblie -->
 			<a href="index.html" class="logo-mobile">
 				<img src="{% static 'images/icons/logo.png' %}" alt="IMG-LOGO">
-			</a>
+			</a> {% endcomment %}
 
-			<!-- Button show menu -->
+		  <!-- Button show menu -->
 			<div class="btn-show-menu">
 				<!-- Header Icon mobile -->
 				<div class="header-icons-mobile">
@@ -196,14 +182,14 @@
 						<span class="hamburger-inner"></span>
 					</span>
 				</div>
-			</div>
+			</div> 
 		</div>
 
-		<!-- Menu Mobile -->
+	<!-- Menu Mobile -->
 		<div class="wrap-side-menu" >
 			<nav class="side-menu">
 				<ul class="main-menu">
-					<li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
+					{% comment %} <li class="item-topbar-mobile p-l-20 p-t-8 p-b-8">
 						<span class="topbar-child1">
 							Free shipping for standard order over $100
 						</span>
@@ -222,9 +208,9 @@
 								</select>
 							</div>
 						</div>
-					</li>
+					</li> {% endcomment %}
 
-					<li class="item-topbar-mobile p-l-10">
+					{% comment %} <li class="item-topbar-mobile p-l-10">
 						<div class="topbar-social-mobile">
 							<a href="#" class="topbar-social-item fa fa-facebook"></a>
 							<a href="#" class="topbar-social-item fa fa-instagram"></a>
@@ -232,7 +218,7 @@
 							<a href="#" class="topbar-social-item fa fa-snapchat-ghost"></a>
 							<a href="#" class="topbar-social-item fa fa-youtube-play"></a>
 						</div>
-					</li>
+					</li> {% endcomment %}
 
 					<li class="item-menu-mobile">
 						<a href="/">Home</a>
@@ -264,5 +250,5 @@
 
 				</ul>
 			</nav>
-		</div>
+		</div> 
 	</header>

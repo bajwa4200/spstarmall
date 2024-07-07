@@ -1056,7 +1056,7 @@ li.sale-noti > a {
 .side-menu .main-menu {margin-bottom: 0;}
 
 .item-menu-mobile {
-  background-color: #e65540;
+  background-color: #000;
 }
 
 .side-menu .main-menu > li > a {
@@ -1107,7 +1107,7 @@ li.sale-noti > a {
 
 .side-menu .sub-menu > li {
   padding-left: 12px;
-  padding-top: 
+  /* padding-top:  */
 }
 
 .side-menu .sub-menu a:hover {
@@ -1867,11 +1867,11 @@ li.sale-noti > a {
 */
 .bg-title-page {
   width: 100%;
-  min-height: 239px;
+  min-height: 700px;
   padding-left: 15px;
   padding-right: 15px;
   background-repeat: no-repeat;
-  background-position: center 0;
+  background-position: center ;
   background-size: cover;
 }
 

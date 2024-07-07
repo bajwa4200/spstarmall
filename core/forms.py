@@ -4,7 +4,8 @@ from django_countries.widgets import CountrySelectWidget
 
 PAYMENT_CHOICES = (
     ('S', 'Stripe'),
-    ('P', 'PayPal')
+    ('P', 'PayPal'),
+    ('PU', 'Pickup')
 )
 
 
@@ -28,6 +29,19 @@ class CheckoutForm(forms.Form):
     save_info = forms.BooleanField(required=False)
     payment_option = forms.ChoiceField(
         widget=forms.RadioSelect, choices=PAYMENT_CHOICES)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Adjust required fields based on payment_option
+        if 'payment_option' in self.data and self.data['payment_option'] == 'PU':  # 'PU' is Pickup option
+            self.fields['street_address'].required = False
+            self.fields['apartment_address'].required = False
+            self.fields['country'].required = False
+            self.fields['zip'].required = False
+        else:
+            self.fields['street_address'].required = True
+            self.fields['apartment_address'].required = True
+            self.fields['country'].required = True
+            self.fields['zip'].required = True
 
 
 class CouponForm(forms.Form):

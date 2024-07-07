@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Sum
 from django.shortcuts import reverse
 from django_countries.fields import CountryField
+from django.utils.text import slugify
 
 # Create your models here.
 CATEGORY_CHOICES = (
@@ -50,16 +51,55 @@ class Category(models.Model):
         })
 
 
+
+
+class Subcategory(models.Model):
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True, blank=True)
+    description = models.TextField()
+    image = models.ImageField()
+    is_active = models.BooleanField(default=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories', default=None)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("core:subcategory", kwargs={'slug': self.slug})
+
+    def get_absolute_category_url(self):
+        return reverse("core:category", kwargs={'slug': self.category.slug})
+
+
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
+    discount_date_time = models.DateField()
+    pack_size = models.CharField(max_length=100)
+    price_inc_vat = models.FloatField(default=0.0)  # Default price including VAT
+    rrp = models.FloatField(default=0.0)  # Default recommended retail price
+    por = models.FloatField(default=0.0)  # Default price of purchase
+    vat = models.FloatField(default=0.0) 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='items')
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     slug = models.SlugField()
     stock_no = models.CharField(max_length=10)
     description_short = models.CharField(max_length=50)
     description_long = models.TextField()
+    ingredients_and_allergens = models.TextField()
+    handling_and_cooking = models.TextField()
+    product_packaging_information = models.TextField()
+    shelf_dimensions = models.TextField()
+    brand_and_supplier_information = models.TextField()
+    safety_information = models.TextField()
+    product_disclaimer = models.TextField()
     image = models.ImageField()
     is_active = models.BooleanField(default=True)
 
@@ -80,6 +120,20 @@ class Item(models.Model):
         return reverse("core:remove-from-cart", kwargs={
             'slug': self.slug
         })
+
+
+
+# models.py
+
+class ProductInformation(models.Model):
+    item = models.OneToOneField(Item, on_delete=models.CASCADE)
+    additional_field1 = models.CharField(max_length=100)
+    additional_field2 = models.CharField(max_length=100)
+    additional_field3 = models.CharField(max_length=100)
+    # Add more fields as needed
+
+    def __str__(self):
+        return self.item.title + " - Product Information"
 
 
 class OrderItem(models.Model):
@@ -127,6 +181,9 @@ class Order(models.Model):
     received = models.BooleanField(default=False)
     refund_requested = models.BooleanField(default=False)
     refund_granted = models.BooleanField(default=False)
+    is_pickup = models.BooleanField(default=False)  # New field for pickup
+    payment_method = models.CharField(max_length=50, blank=True, null=True)  # New field for payment method
+    order_completed = models.BooleanField(default=False)  # New field for order completion
 
     '''
     1. Item added to cart
